@@ -151,76 +151,89 @@ preciosCR/
 
 ---
 
-## Ruta de desarrollo — Fases
+## Ruta de desarrollo — PreciosCR v2.0
 
-### ✅ Fase 1 — Cimientos `[en progreso]`
+### ✅ Fase 1 — Cimientos [en progreso]
 
-| Paso | Tarea | Criterio de exito |
+| Paso | Tarea | Criterio de éxito |
 |------|-------|-------------------|
-| 1.1 | Schema PostgreSQL + modelos SQLAlchemy | Migraciones corren sin error |
-| 1.2 | `robots.py` — validacion robots.txt reutilizable | `can_fetch()` retorna bool correcto |
-| 1.3 | `base_scraper.py` — Playwright + User-Agent + delay | Instanciable sin errores, delay en logs |
-| 1.4 | Scraper Auto Mercado — nombre, precio, promo, imagen_url | Retorna lista con todos los campos |
-| 1.5 | Scheduler con 2 ciclos diarios + ciclo manual para testing | Ciclo manual guarda datos en DB |
-| 1.6 | API basica: `GET /productos` y `GET /comparar/{id}` | Responde JSON con imagen_url incluida |
+| 1.1 | `config.py` — carga de variables de entorno con python-dotenv | Todas las vars de .env.example se leen correctamente |
+| 1.2 | `docker-compose.yml` — servicios: PostgreSQL, backend, frontend | `docker compose up` levanta todo sin errores |
+| 1.3 | Schema PostgreSQL + modelos SQLAlchemy (incluye `imagen_url`, `precio_por_unidad`, `requiere_membresia`) | Alembic corre `alembic upgrade head` sin error |
+| 1.4 | `robots.py` — validación robots.txt reutilizable | `can_fetch()` retorna bool correcto para cada dominio objetivo |
+| 1.5 | `base_scraper.py` — Playwright + User-Agent propio + delay 5–10s + perfil persistente (cookies) | Instanciable, delay verificable en logs, perfil persiste entre sesiones |
+| 1.6 | Scraper Auto Mercado — nombre, precio, precio_por_unidad, unidad, es_promo, imagen_url | Retorna lista con todos los campos, imagen_url válida |
+| 1.7 | Scheduler con 2 ciclos diarios (3am/3pm) + ciclo manual para testing | Ciclo manual ejecuta, guarda datos en DB, log generado |
+| 1.8 | API básica: `GET /productos` y `GET /comparar/{id}` | Responde JSON con imagen_url y precio_por_unidad incluidos |
+| 1.9 | `.env.example` con todas las variables documentadas | Cualquier dev puede arrancar copiando el archivo |
 
 ---
 
-### 📋 Fase 2 — Scrapers restantes `[pendiente]`
+### 📋 Fase 2 — Scrapers restantes [pendiente]
 
-| Paso | Tarea | Criterio de exito |
+| Paso | Tarea | Criterio de éxito |
 |------|-------|-------------------|
-| 2.1 | Scraper Walmart | Datos en DB, imagen_url valida |
-| 2.2 | Scraper Maxi Pali | Datos en DB, imagen_url valida |
-| 2.3 | Scraper MegaSuper | Datos en DB, imagen_url valida |
-| 2.4 | Scraper Mayca (filtrar equivalentes de consumo) | Datos en DB, imagen_url valida |
-| 2.5 | Scraper PriceSmart — solo precios publicos, `requiere_membresia=true` | Sin ningun tipo de login |
+| 2.1 | Scraper Walmart — nombre, precio, precio_por_unidad, unidad, promo, imagen_url | Datos en DB con todos los campos, imagen_url válida |
+| 2.2 | Scraper Maxi Palí — ídem | Datos en DB con todos los campos, imagen_url válida |
+| 2.3 | Scraper MegaSuper — ídem | Datos en DB con todos los campos, imagen_url válida |
+| 2.4 | Scraper Mayca — ídem, filtrar solo equivalentes de consumo (no B2B puro) | Datos en DB, productos tienen par en otra tienda |
+| 2.5 | Scraper PriceSmart — solo precios públicos, `requiere_membresia=true`, sin ningún login | Datos en DB con flag activo, nunca toca autenticación |
+| 2.6 | Test de schema unificado — todos los scrapers retornan exactamente los mismos campos | Script de validación pasa para las 6 tiendas |
+| 2.7 | Mecanismo de fallo: deshabilitar scraper tras 3 ciclos fallidos + alerta Telegram | Telegram recibe notificación, scraper se omite en ciclo siguiente |
 
 ---
 
-### 📋 Fase 3 — Frontend base `[pendiente]`
+### 📋 Fase 3 — Frontend base [pendiente]
 
-| Paso | Tarea | Criterio de exito |
+| Paso | Tarea | Criterio de éxito |
 |------|-------|-------------------|
-| 3.1 | Monitor de Precios — cards con imagen y mejor precio | Cards con fallback a placeholder |
-| 3.2 | Comparador — tabla por supermercado + grafico historial | Badge naranja de membresia en PriceSmart |
-| 3.3 | Busqueda en tiempo real por nombre/categoria | Filtra mientras se escribe |
-| 3.4 | Disclaimer global: _"Precios referenciales. Verificar en tienda."_ | Visible en todas las vistas |
+| 3.1 | Setup proyecto React + Vite + TailwindCSS + Axios + react-query + Zustand | `npm run dev` sin errores, react-query devtools visible |
+| 3.2 | Componente `react-image-fallback` configurado globalmente con placeholder | Imagen rota nunca visible en ninguna vista |
+| 3.3 | Componente badge PriceSmart — badge naranja "⚠ Requiere membresía" | Visible sin hover en todas las vistas donde aparezca PriceSmart |
+| 3.4 | Disclaimer global en layout — "Precios referenciales. Verificar en tienda." + "PreciosCR no tiene relación comercial con los supermercados." | Visible en todas las vistas sin scroll |
+| 3.5 | Vista Monitor de Precios — cards por categoría con imagen y mejor precio | Cards con fallback, badge PriceSmart funcional |
+| 3.6 | Vista Comparador — tabla por supermercado + gráfico historial (Recharts) | Badge naranja visible, gráfico renderiza sin errores |
+| 3.7 | `GET /productos/{id}/historial` — endpoint + integración en Comparador | Historial aparece en gráfico con datos reales |
+| 3.8 | `GET /buscar?q=` — endpoint + búsqueda en tiempo real por nombre/categoría | Filtra mientras se escribe, resultados con imagen |
 
 ---
 
-### 📋 Fase 4 — Inteligencia y alertas `[pendiente]`
+### 📋 Fase 4 — Inteligencia y alertas [pendiente]
 
-| Paso | Tarea | Criterio de exito |
+| Paso | Tarea | Criterio de éxito |
 |------|-------|-------------------|
-| 4.1 | Detector de cambios — bajada %, `promo_temporal`, `precio_minimo_30d` | Badges correctos en frontend |
-| 4.2 | Alertas Telegram — precio anterior/nuevo + link + imagen | Mensaje llega al chat |
-| 4.3 | Alertas Email via SMTP (opcional) | Email con formato correcto |
-| 4.4 | `POST /alertas` para configurar alertas por producto | Alerta dispara en siguiente ciclo |
+| 4.1 | `detector.py` — comparar precio nuevo vs último registrado, marcar `promo_temporal` y `precio_minimo_30d` | Flags guardados correctamente en DB tras ciclo de prueba |
+| 4.2 | Badges en frontend para `promo_temporal` y `precio_minimo_30d` | Badges visibles en Monitor y Comparador con datos reales |
+| 4.3 | `alertas.py` — motor Telegram: precio anterior/nuevo + link + imagen del producto | Mensaje llega al chat con formato correcto |
+| 4.4 | `alertas.py` — motor Email vía SMTP (opcional) | Email recibido con formato correcto |
+| 4.5 | `POST /alertas` — crear alerta por producto con umbral configurable | Alerta se crea en DB y dispara en el siguiente ciclo |
 
 ---
 
-### 📋 Fase 5 — Carrito y analytics `[pendiente]`
+### 📋 Fase 5 — Carrito y analytics [pendiente]
 
-| Paso | Tarea | Criterio de exito |
+| Paso | Tarea | Criterio de éxito |
 |------|-------|-------------------|
-| 5.1 | Algoritmo carrito optimo — precio + costo de viaje | Retorna combinacion mas barata |
-| 5.2 | Vista Carrito Optimo con seleccion de productos | Muestra ahorro vs una sola tienda |
-| 5.3 | Vista Compra Final — lista por supermercado con links | Links abren el producto correcto |
-| 5.4 | Analytics — dia mas barato, ranking tiendas, tendencias | Graficos Recharts sin errores |
+| 5.1 | `carrito.py` — algoritmo carrito óptimo: precio + `costo_viaje_estimado` configurable | Retorna combinación más barata con desglose por tienda |
+| 5.2 | `GET /carrito/optimo` — endpoint con parámetro `costo_viaje` | Responde JSON con ahorro calculado vs. una sola tienda |
+| 5.3 | Vista Carrito Óptimo — selección de productos (con imagen), slider de costo de viaje, cálculo en tiempo real | Muestra ahorro numérico vs. comprar todo en tienda más cara |
+| 5.4 | Vista Compra Final — lista organizada por supermercado con links directos | Links abren el producto correcto en la tienda |
+| 5.5 | `analytics.py` — queries: día más barato, ranking tiendas, tendencias semanales | Queries corren en < 500ms con datos reales |
+| 5.6 | `GET /analytics/semanal` + Vista Analytics con gráficos Recharts | Gráficos renderizan sin errores con datos reales |
 
 ---
 
-### 📋 Fase 6 — Pulido y produccion `[pendiente]`
+### 📋 Fase 6 — Pulido y producción [pendiente]
 
-| Paso | Tarea | Criterio de exito |
+| Paso | Tarea | Criterio de éxito |
 |------|-------|-------------------|
-| 6.1 | PWA — manifest.json + service worker | Instalable en Android/iOS |
-| 6.2 | Particionamiento tabla `precios` si supera 10M filas | Query historial < 200ms |
-| 6.3 | Logging centralizado de ciclos | Log consultable por ciclo |
-| 6.4 | Manejo de fallo de imagen_url | Nunca se ve imagen rota |
-| 6.5 | Optimizaciones de performance | Lighthouse > 80 en movil |
-
+| 6.1 | Lazy loading de imágenes en todas las vistas | Lighthouse performance > 80 en móvil |
+| 6.2 | react-query cache configurado correctamente (stale time, refetch intervals) | No hay requests duplicados innecesarios en Network tab |
+| 6.3 | Particionamiento tabla `precios` por fecha si supera 10M filas | Query de historial < 200ms |
+| 6.4 | Logging centralizado de ciclos — qué se extrajo, cuántos requests por tienda, errores | Log consultable por ciclo, sirve como evidencia de uso razonable |
+| 6.5 | Manejo de fallo de imagen_url — caché del último URL válido por producto/tienda | Nunca se muestra imagen rota, placeholder aparece consistentemente |
+| 6.6 | PWA — manifest.json + service worker + íconos | Instalable en Android/iOS, Lighthouse PWA checklist pasa |
+| 6.7 | `README.md` — instalación, variables de entorno, cómo correr scrapers manualmente | Un dev nuevo puede levantar el proyecto sin preguntar nada |
 ---
 
 ## API — Endpoints principales
