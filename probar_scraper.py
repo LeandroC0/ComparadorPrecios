@@ -1,14 +1,29 @@
-from dotenv import load_dotenv
-from pathlib import Path
-load_dotenv(dotenv_path=Path(__file__).parent / ".env")
+from backend.scrapers.auto_mercado import (
+    AutoMercadoScraper
+)
 
-from backend.scrapers.auto_mercado import AutoMercadoScraper
 
-if __name__ == "__main__":
-    scraper = AutoMercadoScraper()
-    productos = scraper.ejecutar()
+print("\n=== INICIANDO SCRAPER ===\n")
 
-    print(f"\nTotal: {len(productos)} productos")
-    for p in productos[:5]:
-        print(f"  {p['nombre']} - {p['precio']}")
-        
+scraper = AutoMercadoScraper()
+
+productos = scraper.ejecutar()
+
+print("\n=== RESULTADOS ===\n")
+
+print(f"Productos encontrados: {len(productos)}")
+
+# Muestra algunos productos
+for p in productos[:5]:
+
+    print("-" * 50)
+
+    print(f"Nombre: {p.get('nombre')}")
+
+    print(f"Precio: {p.get('precio')}")
+
+    print(f"Promo: {p.get('es_promo')}")
+
+    print(f"URL: {p.get('url')}")
+
+    print(f"Imagen: {p.get('imagen_url')}")

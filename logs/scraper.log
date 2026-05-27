@@ -1,0 +1,81 @@
+2026-05-27 00:55:43,515 [INFO] [auto_mercado] Entrando a https://www.automercado.cr/buscar?q=arroz
+2026-05-27 00:55:46,732 [INFO] [auto_mercado] Status: 200
+2026-05-27 00:55:46,733 [INFO] [auto_mercado] Esperando 3.2s
+2026-05-27 00:55:59,085 [INFO] [auto_mercado] Esperando 3.0s
+2026-05-27 00:56:02,844 [INFO] [auto_mercado] 30 productos encontrados
+2026-05-27 01:13:33,236 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-27 01:13:33,246 [INFO] Added job "ejecutar_scrapers" to job store "default"
+2026-05-27 01:13:33,246 [INFO] Scheduler started
+2026-05-27 01:15:09,507 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-27 01:15:09,509 [INFO] Added job "ejecutar_scrapers" to job store "default"
+2026-05-27 01:15:09,510 [INFO] Scheduler started
+2026-05-27 01:16:09,518 [INFO] Running job "ejecutar_scrapers (trigger: interval[0:01:00], next run at: 2026-05-27 01:16:09 CST)" (scheduled at 2026-05-27 01:16:09.507234-06:00)
+2026-05-27 01:16:10,869 [INFO] [auto_mercado] Entrando a https://www.automercado.cr/buscar?q=arroz
+2026-05-27 01:16:40,882 [ERROR] [auto_mercado] Intento 1 falló: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.automercado.cr/buscar?q=arroz", waiting until "networkidle"
+
+2026-05-27 01:16:40,975 [WARNING] [auto_mercado] Reintentando en 16s
+2026-05-27 01:16:57,759 [INFO] [auto_mercado] Entrando a https://www.automercado.cr/buscar?q=arroz
+2026-05-27 01:17:09,522 [WARNING] Execution of job "ejecutar_scrapers (trigger: interval[0:01:00], next run at: 2026-05-27 01:17:09 CST)" skipped: maximum number of running instances reached (1)
+2026-05-27 01:17:27,771 [ERROR] [auto_mercado] Intento 2 falló: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://www.automercado.cr/buscar?q=arroz", waiting until "networkidle"
+
+2026-05-27 01:17:27,887 [WARNING] [auto_mercado] Reintentando en 34s
+2026-05-27 01:18:01,892 [ERROR] Job "ejecutar_scrapers (trigger: interval[0:01:00], next run at: 2026-05-27 01:18:09 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\User\Documents\GitHub\ComparadorPrecios\.venv\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Users\User\Documents\GitHub\ComparadorPrecios\backend\jobs\run_scrapers.py", line 24, in ejecutar_scrapers
+    scraper.ejecutar()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\User\Documents\GitHub\ComparadorPrecios\backend\scrapers\base_scraper.py", line 403, in ejecutar
+    self.cerrar_browser()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\User\Documents\GitHub\ComparadorPrecios\backend\scrapers\base_scraper.py", line 173, in cerrar_browser
+    self.browser.close()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\User\Documents\GitHub\ComparadorPrecios\.venv\Lib\site-packages\playwright\sync_api\_generated.py", line 14966, in close
+    return mapping.from_maybe_impl(self._sync(self._impl_obj.close(reason=reason)))
+                                   ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Documents\GitHub\ComparadorPrecios\.venv\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "C:\Users\User\Documents\GitHub\ComparadorPrecios\.venv\Lib\site-packages\playwright\_impl\_browser_context.py", line 583, in close
+    await self._channel.send("close", None, {"reason": reason})
+  File "C:\Users\User\Documents\GitHub\ComparadorPrecios\.venv\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\User\Documents\GitHub\ComparadorPrecios\.venv\Lib\site-packages\playwright\_impl\_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TargetClosedError: BrowserContext.close: Target page, context or browser has been closed
+2026-05-27 01:18:09,517 [INFO] Running job "ejecutar_scrapers (trigger: interval[0:01:00], next run at: 2026-05-27 01:19:09 CST)" (scheduled at 2026-05-27 01:18:09.507234-06:00)
+2026-05-27 01:18:09,517 [ERROR] [auto_mercado] Intento 1 falló: It looks like you are using Playwright Sync API inside the asyncio loop.
+Please use the Async API instead.
+2026-05-27 01:18:09,517 [WARNING] [auto_mercado] Reintentando en 12s
+2026-05-27 01:18:22,228 [INFO] [auto_mercado] Entrando a https://www.automercado.cr/buscar?q=arroz
+2026-05-27 01:18:23,331 [ERROR] [auto_mercado] Intento 2 falló: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://www.automercado.cr/buscar?q=arroz", waiting until "networkidle"
+
+2026-05-27 01:18:23,334 [WARNING] [auto_mercado] Reintentando en 24s
+2026-05-27 01:20:37,671 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-27 01:20:37,673 [INFO] Added job "ejecutar_scrapers" to job store "default"
+2026-05-27 01:20:37,673 [INFO] Scheduler started
+2026-05-27 01:21:37,673 [INFO] Running job "ejecutar_scrapers (trigger: interval[0:01:00], next run at: 2026-05-27 01:21:37 CST)" (scheduled at 2026-05-27 01:21:37.671104-06:00)
+2026-05-27 01:21:39,053 [INFO] [auto_mercado] Entrando a https://www.automercado.cr/buscar?q=arroz
+2026-05-27 01:21:39,229 [INFO] [auto_mercado] Status: 200
+2026-05-27 01:21:39,229 [INFO] [auto_mercado] Esperando 5.1s
+2026-05-27 01:21:55,046 [INFO] [auto_mercado] Esperando 8.4s
+2026-05-27 01:22:03,497 [INFO] [auto_mercado] Esperando 6.3s
+2026-05-27 01:22:09,892 [INFO] [auto_mercado] Esperando 9.0s
+2026-05-27 01:22:18,954 [INFO] [auto_mercado] Esperando 6.3s
+2026-05-27 01:22:25,266 [INFO] [auto_mercado] Esperando 8.7s
+2026-05-27 01:22:33,996 [INFO] [auto_mercado] Esperando 4.3s
+2026-05-27 01:22:37,680 [WARNING] Execution of job "ejecutar_scrapers (trigger: interval[0:01:00], next run at: 2026-05-27 01:22:37 CST)" skipped: maximum number of running instances reached (1)
+2026-05-27 01:22:38,331 [INFO] [auto_mercado] Esperando 5.5s
+2026-05-27 01:22:43,862 [INFO] [auto_mercado] Esperando 9.8s
